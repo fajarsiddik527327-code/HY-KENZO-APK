@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JB Store & Services v0.3</title>
+    <title>JB Store & Services v0.4</title>
     <style>
         * {
             margin: 0;
@@ -54,7 +54,7 @@
             border-radius: 20px;
         }
 
-        /* Container */
+        /* Container Utama */
         .container {
             padding: 20px;
             max-width: 500px;
@@ -117,7 +117,7 @@
         .bg-red    { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; }
         .bg-teal   { background-color: rgba(20, 184, 166, 0.15); color: #14b8a6; }
 
-        /* SEKSI BARU: Hubungi Admin (Kendala & Saran) */
+        /* Bantuan Admin */
         .admin-section {
             margin-top: 25px;
             background-color: #1e293b;
@@ -265,12 +265,14 @@
 </head>
 <body>
 
+    <!-- Header -->
     <div class="header">
-        <span class="version-badge">v0.3</span>
+        <span class="version-badge">v0.4</span>
         <h1>JB STORE & SERVICES</h1>
         <p>Silahkan pilih layanan untuk melihat daftar harga</p>
     </div>
 
+    <!-- Container Menu Utama -->
     <div class="container">
         <div class="menu-grid">
             
@@ -312,7 +314,7 @@
 
         </div>
 
-        <!-- FITUR BARU VERSI 0.3: TOMBOL KENDALA & SARAN ADMIN -->
+        <!-- Bantuan & Kendala Admin -->
         <div class="admin-section">
             <p>Jika ada kendala transaksi atau ingin memberikan saran, silahkan hubungi layanan bantuan melalui chat di bawah ini:</p>
             <button class="btn-admin" onclick="chatKendalaAdmin()">
@@ -342,7 +344,7 @@
     </div>
 
     <script>
-        // NOMOR ADMIN YANG KAMU BERIKAN (Sudah diubah ke format internasional 62)
+        // NOMOR ADMIN (083121940097)
         const NOMOR_ADMIN = "6283121940097"; 
 
         // Data Harga & Produk Toko Kamu
@@ -433,7 +435,7 @@
             window.location.href = linkWA;
         }
 
-        // FITUR BARU VERSI 0.3: Fungsi Mengirim Chat Kendala/Saran ke Admin
+        // Fungsi Mengirim Chat Kendala/Saran ke Admin
         function chatKendalaAdmin() {
             let pesanKendala = `Halo Admin, saya pengguna APK JB Store & Services.\nSaya ingin menyampaikan [kendala / saran] terkait aplikasi ini...`;
             let linkWAAdmin = "https://api.whatsapp.com/send?phone=" + NOMOR_ADMIN + "&text=" + encodeURIComponent(pesanKendala);
