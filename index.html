@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JB Store & Services</title>
+    <title>JB Store & Services v0.2</title>
     <style>
         * {
             margin: 0;
@@ -19,13 +19,14 @@
             padding-bottom: 30px;
         }
 
-        /* Header */
+        /* Header & Versi */
         .header {
             background: linear-gradient(135deg, #1e293b, #0f172a);
             padding: 25px 20px;
             text-align: center;
             border-bottom: 2px solid #334155;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         .header h1 {
@@ -39,6 +40,18 @@
         .header p {
             font-size: 13px;
             color: #94a3b8;
+        }
+
+        .version-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #38bdf8;
+            color: #0f172a;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 20px;
         }
 
         /* Container */
@@ -104,67 +117,154 @@
         .bg-red    { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; }
         .bg-teal   { background-color: rgba(20, 184, 166, 0.15); color: #14b8a6; }
 
-        /* Toast Notification */
-        .toast {
+        /* Sistem Pop-up (Modal) */
+        .modal-overlay {
             position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background-color: #38bdf8;
-            color: #0f172a;
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 600;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 999;
-            white-space: nowrap;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
             opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
         }
 
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
+        .modal-overlay.active {
             opacity: 1;
+            pointer-events: auto;
         }
+
+        .modal-box {
+            background-color: #1e293b;
+            border: 2px solid #334155;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            color: #38bdf8;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 10px;
+        }
+
+        .price-list {
+            margin-bottom: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 5px;
+            border-bottom: 1px dashed #334155;
+            font-size: 14px;
+        }
+
+        .price-item span:last-child {
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        /* Tombol Pembayaran */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .btn-pay {
+            background-color: #22c55e;
+            color: #ffffff;
+        }
+
+        .btn-pay:active { background-color: #16a34a; }
+
+        .btn-close {
+            background-color: #475569;
+            color: #f8fafc;
+        }
+
+        .btn-close:active { background-color: #334155; }
     </style>
 </head>
 <body>
 
     <div class="header">
+        <span class="version-badge">v0.2</span>
         <h1>JB STORE & SERVICES</h1>
-        <p>Solusi Kebutuhan Digital & Game Kustomisasi</p>
+        <p>Silahkan pilih layanan untuk melihat daftar harga</p>
     </div>
 
     <div class="container">
         <div class="menu-grid">
             
-            <div class="card" onclick="showToast('Membuka Layanan Top Up Game...')">
+            <!-- TOP UP -->
+            <div class="card" onclick="openModal('topup')">
                 <div class="icon-wrapper bg-orange">🎮</div>
                 <h3>TOP UP GAME</h3>
             </div>
 
-            <div class="card" onclick="showToast('Membuka Layanan Nomor Kosong...')">
+            <!-- NOKOS -->
+            <div class="card" onclick="openModal('nokos')">
                 <div class="icon-wrapper bg-blue">📱</div>
                 <h3>NOMOR KOSONG</h3>
             </div>
 
-            <div class="card" onclick="showToast('Membuka Folder File FF...')">
+            <!-- FILE FF -->
+            <div class="card" onclick="openModal('fileff')">
                 <div class="icon-wrapper bg-green">📂</div>
                 <h3>FILE FF</h3>
             </div>
 
-            <div class="card" onclick="showToast('Membuka Menu Penyewaan Bot...')">
+            <!-- SEWA BOT -->
+            <div class="card" onclick="openModal('sewabot')">
                 <div class="icon-wrapper bg-purple">🤖</div>
                 <h3>SEWA BOT</h3>
             </div>
 
-            <div class="card" onclick="showToast('Membuka Kumpulan Script Bot...')">
+            <!-- SCRIPT BOT -->
+            <div class="card" onclick="openModal('scbot')">
                 <div class="icon-wrapper bg-red">💻</div>
                 <h3>SCRIPT BOT</h3>
             </div>
 
-            <div class="card" onclick="showToast('Membuka Layanan Desain Logo...')">
+            <!-- LOGO -->
+            <div class="card" onclick="openModal('logo')">
                 <div class="icon-wrapper bg-teal">🎨</div>
                 <h3>DESAIN LOGO</h3>
             </div>
@@ -172,18 +272,118 @@
         </div>
     </div>
 
-    <div id="toast" class="toast">Notifikasi</div>
+    <!-- Jendela Pop-up Modal -->
+    <div id="paymentModal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div id="modalTitle" class="modal-title">Detail Layanan</div>
+            
+            <!-- Tempat Daftar Harga -->
+            <div id="modalPrices" class="price-list">
+                <!-- Data dimasukkan via Javascript -->
+            </div>
+
+            <!-- Tombol Aksi -->
+            <div class="btn-group">
+                <button class="btn btn-pay" onclick="prosesBayar()">
+                    💳 Bayar Otomatis (QRIS / Dana)
+                </button>
+                <button class="btn btn-close" onclick="forceCloseModal()">Kembali</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.innerText = message;
-            toast.classList.add('show');
+        // GANTI NOMOR WHATSAPP KAMU DI SINI (Gunakan kode negara 62)
+        const NOMOR_ADMIN = "6281234567890"; 
+
+        // Data Harga & Produk Toko Kamu
+        const dataProduk = {
+            topup: {
+                title: "Top Up Game (Free Fire)",
+                list: [
+                    { nama: "50 Diamonds", harga: "Rp 8.000" },
+                    { nama: "70 Diamonds", font: "Rp 10.000" },
+                    { nama: "140 Diamonds", harga: "Rp 19.000" },
+                    { nama: "355 Diamonds", harga: "Rp 48.000" }
+                ]
+            },
+            nokos: {
+                title: "Nomor Kosong (Nokos OTP)",
+                list: [
+                    { nama: "Nokos Telegram Indo", harga: "Rp 5.000" },
+                    { nama: "Nokos WhatsApp Indo", harga: "Rp 7.000" },
+                    { nama: "Nokos Telegram Luar", harga: "Rp 3.500" }
+                ]
+            },
+            fileff: {
+                title: "File Premium Free Fire",
+                list: [
+                    { nama: "File Config Antena Vip", harga: "Rp 10.000" },
+                    { nama: "Data Panel Sensitivitas", harga: "Rp 15.000" },
+                    { nama: "Bypass Emulator Update", harga: "Rp 25.000" }
+                ]
+            },
+            sewabot: {
+                title: "Penyewaan Bot Telegram/WA",
+                list: [
+                    { nama: "Sewa Bot OTP (1 Minggu)", harga: "Rp 15.000" },
+                    { nama: "Sewa Bot OTP (1 Bulan)", harga: "Rp 40.000" },
+                    { nama: "Sewa Bot Push Kontak (Sebulan)", harga: "Rp 20.000" }
+                ]
+            },
+            scbot: {
+                title: "Script Bot (Source Code)",
+                list: [
+                    { nama: "SC Bot OTP Python Pterodactyl", harga: "Rp 35.000" },
+                    { nama: "SC Bot jaspuh Boosting", harga: "Rp 25.000" }
+                ]
+            },
+            logo: {
+                title: "Jasa Desain Logo",
+                list: [
+                    { nama: "Logo Keren Avatar Gaming", harga: "Rp 15.000" },
+                    { nama: "Logo 3D Toko Digital", harga: "Rp 20.000" }
+                ]
+            }
+        };
+
+        let layananAktif = "";
+
+        // Fungsi Membuka Pop-up
+        function openModal(jenis) {
+            layananAktif = dataProduk[jenis].title;
+            document.getElementById('modalTitle').innerText = dataProduk[jenis].title;
             
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 2000);
+            let htmlHarga = "";
+            dataProduk[jenis].list.forEach(item => {
+                htmlHarga += `
+                    <div class="price-item">
+                        <span>${item.nama}</span>
+                        <span>${item.harga || item.font}</span>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('modalPrices').innerHTML = htmlHarga;
+            document.getElementById('paymentModal').classList.add('active');
+        }
+
+        // Fungsi Menutup Pop-up jika klik area luar
+        function closeModal(e) {
+            document.getElementById('paymentModal').classList.remove('active');
+        }
+
+        function forceCloseModal() {
+            document.getElementById('paymentModal').classList.remove('active');
+        }
+
+        // Fungsi Pembayaran Otomatis Otomatis Diarahkan Ke Sistem Order WA Billing Admin
+        function prosesBayar() {
+            let pesan = `Halo Admin, saya mau order layanan di APK:\n\n*Layanan:* ${layananAktif}\n\nMohon kirimkan kode QRIS / Nomor e-Wallet untuk pembayaran otomatis ya!`;
+            let linkWA = "https://api.whatsapp.com/send?phone=" + NOMOR_ADMIN + "&text=" + encodeURIComponent(pesan);
+            window.location.href = linkWA;
         }
     </script>
 </body>
-</html>
+                </html>
+    
