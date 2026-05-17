@@ -69,14 +69,14 @@
             border-radius: 20px;
         }
 
-        /* --- CONTAINER UTAMA (URUT & AMAN) --- */
+        /* --- CONTAINER UTAMA --- */
         .container {
             padding: 0 15px;
             max-width: 500px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 15px; /* Jarak otomatis antar menu */
+            gap: 15px;
         }
 
         /* --- UPGRADE MEMBERSHIP CARD --- */
@@ -183,10 +183,16 @@
             color: #0284c7;
             background-color: #f8fafc;
             border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
         }
 
         .dropdown-content {
             padding: 0 15px;
+            display: none; /* Bawaan tertutup, bisa di-klik untuk buka */
+        }
+
+        .dropdown-content.active {
+            display: block;
         }
 
         .admin-item {
@@ -237,7 +243,7 @@
         .status-badge.kenon { background-color: #fef9c3; color: #a16207; }
         .status-badge.online { background-color: #dcfce7; color: #15803d; }
 
-        /* --- 4 LAYANAN UTAMA (TOPUP, RIWAYAT, DLL) --- */
+        /* --- 4 LAYANAN UTAMA --- */
         .four-actions-box {
             background-color: #ffffff;
             border-radius: 16px;
@@ -267,7 +273,10 @@
             justify-content: center;
             font-size: 20px;
             margin-bottom: 6px;
+            transition: transform 0.2s;
         }
+
+        .action-item:active .action-icon { transform: scale(0.9); }
 
         .action-item span {
             font-size: 11px;
@@ -342,6 +351,7 @@
             flex-direction: column;
             align-items: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: transform 0.2s;
         }
 
         .card:active {
@@ -422,10 +432,12 @@
         .price-item {
             display: flex;
             justify-content: space-between;
-            padding: 10px 5px;
+            padding: 12px 5px;
             border-bottom: 1px dashed #e2e8f0;
             font-size: 13px;
+            cursor: pointer;
         }
+        .price-item:active { background-color: #f8fafc; }
 
         .price-item span:last-child { color: #16a34a; font-weight: bold; }
 
@@ -479,7 +491,7 @@
             <div class="avatar-circle">👤</div>
             <div class="profile-text">
                 <p>Selamat Malam,</p>
-                <h2>userpelanggan@gmail.com</h2>
+                <h2>gadisliakisaran@gmail.com</h2>
             </div>
         </div>
     </div>
@@ -500,7 +512,7 @@
         <div class="info-row">
             <div class="info-box">
                 <p>Saldo Account</p>
-                <h4>Rp 3.291</h4>
+                <h4 id="displaySaldo">Rp 0</h4>
             </div>
             <div class="info-box bg-green" onclick="chatKendalaAdmin()">
                 <p>CS HyRizz (wa)</p>
@@ -509,77 +521,15 @@
         </div>
 
         <div class="admin-dropdown-box">
-            <div class="dropdown-header">
+            <div class="dropdown-header" onclick="toggleAdminDropdown()">
                 <span>👤 Cek Status Admin</span>
-                <span>▼</span>
+                <span id="panahDropdown">▼</span>
             </div>
-            <div class="dropdown-content">
+            <div id="kontenAdmin" class="dropdown-content">
                 <div class="admin-item">
                     <div class="admin-left">
                         <div class="admin-avatar" style="color: #38bdf8;">🛒</div>
                         <div class="admin-details">
                             <h5>Admin 1</h5>
-                            <p>PEMILIK HYRIZZ</p>
-                        </div>
-                    </div>
-                    <div class="status-badge kenon">🟠 Kenon</div>
-                </div>
-                <div class="admin-item">
-                    <div class="admin-left">
-                        <div class="admin-avatar" style="color: #a855f7;">💼</div>
-                        <div class="admin-details">
-                            <h5>Admin 2</h5>
-                            <p>Admin</p>
-                        </div>
-                    </div>
-                    <div class="status-badge kenon">🟠 Kenon</div>
-                </div>
-                <div class="admin-item">
-                    <div class="admin-left">
-                        <div class="admin-avatar" style="color: #22c55e;">⚡</div>
-                        <div class="admin-details">
-                            <h5>Admin 3</h5>
-                            <p>Admin</p>
-                        </div>
-                    </div>
-                    <div class="status-badge online">🟢 Online</div>
-                </div>
-            </div>
-        </div>
 
-        <div class="four-actions-box">
-            <div class="action-item" onclick="alert('Menu Topup Saldo E-Wallet')">
-                <div class="action-icon">🏧</div>
-                <span>Topup</span>
-            </div>
-            <div class="action-item" onclick="alert('Menu Riwayat Transaksi')">
-                <div class="action-icon">🕒</div>
-                <span>Riwayat</span>
-            </div>
-            <div class="action-item" onclick="alert('Menu Transaksi')">
-                <div class="action-icon">💸</div>
-                <span>Transaksi</span>
-            </div>
-            <div class="action-item" onclick="alert('Menu QRIS Pembayaran')">
-                <div class="action-icon">🔲</div>
-                <span>QRIS</span>
-            </div>
-        </div>
-
-        <div class="notice-bar">
-            <div class="notice-icon">📢</div>
-            <marquee scrollamount="4">Informasi Penting! Bergabunglah dengan saluran resmi kami untuk info update harga harian termurah dan event menarik lainnya!</marquee>
-        </div>
-
-        <div class="search-box">
-            <span>🔍</span>
-            <input type="text" placeholder="Cari menu (pulsa, game, dll)...">
-        </div>
-
-        <div class="section-title">Kategori Layanan Toko</div>
-        <div class="menu-grid">
-            <div class="card" onclick="openModal('topup')">
-                <div class="icon-wrapper bg-orange">🎮</div>
-                <h3>TOP UP GAME</h3>
-    </div>
-    
+                            
